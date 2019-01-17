@@ -4,10 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Statistic;
 use App\Entity\StatisticRepositoryInterface;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Class StatisticRepository
@@ -19,6 +17,7 @@ final class StatisticRepository implements StatisticRepositoryInterface
      * @var EntityManagerInterface
      */
     private $entityManager;
+
     /**
      * @var ObjectRepository
      */

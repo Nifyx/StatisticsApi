@@ -5,7 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\StatisticRepository")
+ * @ORM\Entity
+ * @package App\Entity
  */
 class Statistic
 {
@@ -27,20 +28,52 @@ class Statistic
     private $ip;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Pen", inversedBy="statistics")
      */
-    private $dateAndHours;
+    private $pen;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /*
+     * Gets triggered only on insert
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime("now");
+    }
+
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return null|string
+     */
     public function getCountry(): ?string
     {
         return $this->country;
     }
 
+    /**
+     * @param string $country
+     * @return Statistic
+     */
     public function setCountry(string $country): self
     {
         $this->country = $country;
@@ -48,11 +81,18 @@ class Statistic
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getIp(): ?string
     {
         return $this->ip;
     }
 
+    /**
+     * @param string $ip
+     * @return Statistic
+     */
     public function setIp(string $ip): self
     {
         $this->ip = $ip;
@@ -60,14 +100,14 @@ class Statistic
         return $this;
     }
 
-    public function getDateAndHours(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->dateAndHours;
+        return $this->createdAt;
     }
 
-    public function setDateAndHours(?\DateTimeInterface $dateAndHours): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->dateAndHours = $dateAndHours;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
