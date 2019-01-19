@@ -9,7 +9,9 @@
 namespace App\Controller\Rest;
 
 
+use App\Entity\Pen;
 use App\Entity\Statistic;
+use App\Repository\PenRepository;
 use App\Repository\StatisticRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -33,20 +35,30 @@ class StatisticController extends AbstractFOSRestController
      * Create a statistic in base
      * @Rest\Post("/stat")
      * @param Request $request
-     * @param SerializerInterface $serializer
      * @return View
      */
-    public function postStatistic(Request $request, SerializerInterface $serializer):View
+    public function postStatistic(Request $request):View
     {
+        /*$idPen = $request->get('idPen');
+        $pen = $this->penRepository->findById($idPen);
+        if($pen == null){
+            $pen = new Pen();
+            $pen->setId($idPen);
+        }*/
+
         $statistic = new Statistic();
-        //dump($statistic);
         $statistic->setCountry($request->get('country'));
-        $statistic->setIp($request->get('ip'));
+
+
+        //$pen->addStatistic($statistic);
+
+        //$statistic->setIp($request->get('ip'));
         //date_default_timezone_set('Europe/Paris');
         //$statistic->setCreatedAt(date("Y-m-d H:i:s"));
         //$statistic->setCreatedAt(new \DateTime('@'.strtotime('now')));
 
         $this->statisticRepository->save($statistic);
+        //$this->penRepository->save($pen);
 
         return View::create($statistic, Response::HTTP_CREATED);
         //return new Response($serializer->serialize($statistic,'json'));

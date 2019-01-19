@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @package App\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class Statistic
 {
@@ -23,21 +24,16 @@ class Statistic
     private $country;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $ip;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Pen", inversedBy="statistics")
      */
-    private $pen;
+    //private $pen;
 
     /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
-    /*
+    /**
      * Gets triggered only on insert
      * @ORM\PrePersist
      */
@@ -77,25 +73,6 @@ class Statistic
     public function setCountry(string $country): self
     {
         $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getIp(): ?string
-    {
-        return $this->ip;
-    }
-
-    /**
-     * @param string $ip
-     * @return Statistic
-     */
-    public function setIp(string $ip): self
-    {
-        $this->ip = $ip;
 
         return $this;
     }
