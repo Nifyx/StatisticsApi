@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Statistic;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @package App\Entity
+ * @package App\Entity\Statistic
  * @ORM\HasLifecycleCallbacks()
  */
 class Statistic
@@ -24,9 +24,9 @@ class Statistic
     private $country;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Pen", inversedBy="statistics")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Pen\Pen")
      */
-    //private $pen;
+    private $pen;
 
     /**
      * @ORM\Column(type="datetime")
@@ -88,4 +88,22 @@ class Statistic
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPen()
+    {
+        return $this->pen;
+    }
+
+    /**
+     * @param mixed $pen
+     */
+    public function setPen($pen): void
+    {
+        $this->pen = $pen;
+    }
+
+
 }

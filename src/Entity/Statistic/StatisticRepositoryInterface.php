@@ -6,10 +6,10 @@
  * Time: 15:27
  */
 
-namespace App\Entity;
+namespace App\Entity\Statistic;
 
 /**
- * Interface StatisticRepositoryInterface
+ * Interface PenRepositoryInterface
  * @package App\Entity
  */
 interface StatisticRepositoryInterface
