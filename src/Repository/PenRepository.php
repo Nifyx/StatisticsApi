@@ -2,8 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Statistic\Statistic;
-use App\Entity\Statistic\StatisticRepositoryInterface;
+use App\Entity\Pen\Pen;
+use App\Entity\Pen\PenRepositoryInterface;
+use App\Entity\Statistic;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -11,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Class PenRepository
  * @package App\Repository
  */
-final class StatisticRepository implements StatisticRepositoryInterface
+final class PenRepository implements PenRepositoryInterface
 {
     /**
      * @var EntityManagerInterface
@@ -30,15 +31,15 @@ final class StatisticRepository implements StatisticRepositoryInterface
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->objectRepository = $this->entityManager->getRepository(Statistic::class);
+        $this->objectRepository = $this->entityManager->getRepository(Pen::class);
     }
     /**
-     * @param int $statId
-     * @return Statistic
+     * @param String $penId
+     * @return Pen
      */
-    public function findById(int $statId): ?Statistic
+    public function findById(String $penId): ?Pen
     {
-        return $this->objectRepository->find($statId);
+        return $this->objectRepository->find($penId);
     }
     /**
      * @return array
@@ -48,19 +49,19 @@ final class StatisticRepository implements StatisticRepositoryInterface
         return $this->objectRepository->findAll();
     }
     /**
-     * @param Statistic $statistic
+     * @param Pen $pen
      */
-    public function save(Statistic $statistic): void
+    public function save(Pen $pen): void
     {
-        $this->entityManager->persist($statistic);
+        $this->entityManager->persist($pen);
         $this->entityManager->flush();
     }
     /**
-     * @param Statistic $statistic
+     * @param Pen $pen
      */
-    public function delete(Statistic $statistic): void
+    public function delete(Pen $pen): void
     {
-        $this->entityManager->remove($statistic);
+        $this->entityManager->remove($pen);
         $this->entityManager->flush();
     }
 }

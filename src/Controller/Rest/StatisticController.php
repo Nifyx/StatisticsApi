@@ -9,8 +9,8 @@
 namespace App\Controller\Rest;
 
 
-use App\Entity\Pen;
-use App\Entity\Statistic;
+use App\Entity\Pen\Pen;
+use App\Entity\Statistic\Statistic;
 use App\Repository\PenRepository;
 use App\Repository\StatisticRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -27,8 +27,14 @@ class StatisticController extends AbstractFOSRestController
      */
     private $statisticRepository;
 
-    public function __construct(StatisticRepository $statisticRepository){
+    /**
+     * @var PenRepository
+     */
+    private $penRepository;
+
+    public function __construct(StatisticRepository $statisticRepository, PenRepository $penRepository){
         $this->statisticRepository = $statisticRepository;
+        $this->penRepository = $penRepository;
     }
 
     /**
@@ -39,15 +45,17 @@ class StatisticController extends AbstractFOSRestController
      */
     public function postStatistic(Request $request):View
     {
-        /*$idPen = $request->get('idPen');
+        $idPen = $request->get('idPen');
         $pen = $this->penRepository->findById($idPen);
         if($pen == null){
             $pen = new Pen();
             $pen->setId($idPen);
-        }*/
+            $this->penRepository->save($pen);
+        }
 
         $statistic = new Statistic();
         $statistic->setCountry($request->get('country'));
+        $statistic->setPen($pen);
 
 
         //$pen->addStatistic($statistic);
@@ -61,6 +69,5 @@ class StatisticController extends AbstractFOSRestController
         //$this->penRepository->save($pen);
 
         return View::create($statistic, Response::HTTP_CREATED);
-        //return new Response($serializer->serialize($statistic,'json'));
     }
 }
