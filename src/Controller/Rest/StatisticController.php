@@ -18,7 +18,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class StatisticController extends AbstractFOSRestController
 {
@@ -38,8 +37,8 @@ class StatisticController extends AbstractFOSRestController
     }
 
     /**
-     * Create a statistic in base
-     * @Rest\Post("/stat")
+     * Create a new view in db
+     * @Rest\Post("/newView")
      * @param Request $request
      * @return View
      */
@@ -56,18 +55,86 @@ class StatisticController extends AbstractFOSRestController
         $statistic = new Statistic();
         $statistic->setCountry($request->get('country'));
         $statistic->setPen($pen);
-
-
-        //$pen->addStatistic($statistic);
-
-        //$statistic->setIp($request->get('ip'));
-        //date_default_timezone_set('Europe/Paris');
-        //$statistic->setCreatedAt(date("Y-m-d H:i:s"));
-        //$statistic->setCreatedAt(new \DateTime('@'.strtotime('now')));
+        $statistic->setOrigin($request->get('origin'));
 
         $this->statisticRepository->save($statistic);
-        //$this->penRepository->save($pen);
 
         return View::create($statistic, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @param Request $request
+     * @Rest\POST("/getPenByPeriod")
+     * @return View
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function postGetPenByPeriod(Request $request):View
+    {
+        $id = $request->query->get('id');
+        $time_start = $request->query->get('time_start');
+        $time_end = $request->query->get('time_end');
+
+        $pens = $this->statisticRepository->getPenByPeriod($id, $time_start, $time_end);
+        $viewTotal = $this->statisticRepository->getTotalViewsForPenByPeriod($id, $time_start, $time_end);
+        $originArray = $this->statisticRepository->getTotalViewsByOrigin($id, $time_start, $time_end);
+        $daysArray = $this->statisticRepository->getStatsPerDay($id, $time_start, $time_end);
+
+        /**
+         * Get stat from codepen
+         */
+        foreach($originArray as $key => $value){
+            if($value['origin'] == "codepen"){
+                $originCodePen = $originArray[$key]['origin'];
+                $nbViewCodePen = $originArray[$key]['nbView'];
+                unset($originArray[$key]);
+            }
+        }
+
+        /**
+         * Create the list for externals stats
+         */
+        $nbTotalViewsExternal = 0;
+        $arrayList = array('List' => array());
+        foreach($originArray as $key => $value){
+            $nbTotalViewsExternal += $value['nbView'];
+            array_push($arrayList['List'],['url' => $value['origin'], 'totalViews' => $value['nbView']]);
+        }
+
+        /**
+         * Create the json to return
+         */
+        $data = array(
+            'totalViews' => $viewTotal,
+            'origins' => array(
+                $originCodePen => array('totalViews' => $nbViewCodePen),
+                'externals' => $arrayList
+            ),
+            'days' => $daysArray
+        );
+
+        return View::create($data, Response::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @Rest\Post("/getCountriesByPeriod")
+     * @return View
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function postGetCountriesByPeriod(Request $request):View
+    {
+        $id = $request->query->get('id');
+        $time_start = $request->query->get('time_start');
+        $time_end = $request->query->get('time_end');
+
+        $totalViews = $this->statisticRepository->getTotalViewsForPenByPeriod($id,$time_start,$time_end);
+        $countriesArray = $this->statisticRepository->getLocationByPenOnPeriod($id,$time_start,$time_end);
+
+        $jsonCountries = array(
+            'totalViews' => $totalViews,
+            'countries' => $countriesArray
+        );
+
+        return View::create($jsonCountries, Response::HTTP_CREATED);
     }
 }

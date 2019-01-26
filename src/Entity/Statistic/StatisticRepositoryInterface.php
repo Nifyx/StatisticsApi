@@ -31,4 +31,43 @@ interface StatisticRepositoryInterface
      * @param Statistic $statistic
      */
     public function delete(Statistic $statistic): void;
+    /**
+     * @param String $idPen
+     * @param String $time_start
+     * @param String $time_end
+     * @return array
+     */
+    public function getPenByPeriod(String $idPen, String $time_start, String $time_end): array;
+
+    /**
+     * @param String $idPen
+     * @param String $time_start
+     * @param String $time_end
+     * @return int
+     */
+    public function getTotalViewsForPenByPeriod(String $idPen, String $time_start, String $time_end): int;
+
+    /**
+     * @param String $idPen
+     * @param String $time_start
+     * @param String $time_end
+     * @return mixed
+     */
+    public function getTotalViewsByOrigin(String $idPen, String $time_start, String $time_end): array;
+
+    /**
+     * @param String $idPen
+     * @param String $time_start
+     * @param String $time_end
+     * @return array
+     */
+    public function getStatsPerDay(String $idPen, String $time_start, String $time_end): array;
+
+    /**
+     * @param String $idPen
+     * @param String $time_start
+     * @param String $time_end
+     * @return array
+     */
+    public function getLocationByPenOnPeriod(String $idPen, String $time_start, String $time_end): array;
 }

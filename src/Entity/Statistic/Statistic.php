@@ -34,6 +34,11 @@ class Statistic
     private $createdAt;
 
     /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $origin;
+
+    /**
      * Gets triggered only on insert
      * @ORM\PrePersist
      */
@@ -105,5 +110,19 @@ class Statistic
         $this->pen = $pen;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
 
+    /**
+     * @param mixed $origin
+     */
+    public function setOrigin($origin): void
+    {
+        $this->origin = $origin;
+    }
 }
