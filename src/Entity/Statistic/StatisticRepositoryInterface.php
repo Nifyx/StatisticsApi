@@ -62,4 +62,12 @@ interface StatisticRepositoryInterface
      * @return array
      */
     public function getStatsPerDay(String $idPen, String $time_start, String $time_end): array;
+
+    /**
+     * @param String $idPen
+     * @param String $time_start
+     * @param String $time_end
+     * @return array
+     */
+    public function getLocationByPenOnPeriod(String $idPen, String $time_start, String $time_end): array;
 }

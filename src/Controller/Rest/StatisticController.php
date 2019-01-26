@@ -68,7 +68,7 @@ class StatisticController extends AbstractFOSRestController
      * @return View
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function getPenByPeriod(Request $request):View
+    public function postGetPenByPeriod(Request $request):View
     {
         $id = $request->query->get('id');
         $time_start = $request->query->get('time_start');
@@ -113,5 +113,28 @@ class StatisticController extends AbstractFOSRestController
         );
 
         return View::create($data, Response::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @Rest\Post("/getCountriesByPeriod")
+     * @return View
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function postGetCountriesByPeriod(Request $request):View
+    {
+        $id = $request->query->get('id');
+        $time_start = $request->query->get('time_start');
+        $time_end = $request->query->get('time_end');
+
+        $totalViews = $this->statisticRepository->getTotalViewsForPenByPeriod($id,$time_start,$time_end);
+        $countriesArray = $this->statisticRepository->getLocationByPenOnPeriod($id,$time_start,$time_end);
+
+        $jsonCountries = array(
+            'totalViews' => $totalViews,
+            'countries' => $countriesArray
+        );
+
+        return View::create($jsonCountries, Response::HTTP_CREATED);
     }
 }
