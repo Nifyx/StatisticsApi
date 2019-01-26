@@ -117,11 +117,11 @@ class StatisticController extends AbstractFOSRestController
 
     /**
      * @param Request $request
-     * @Rest\Post("/getCountriesByPeriod")
+     * @Rest\Post("/getLocationByPeriod")
      * @return View
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function postGetCountriesByPeriod(Request $request):View
+    public function postGetLocationByPeriod(Request $request):View
     {
         $id = $request->query->get('id');
         $time_start = $request->query->get('time_start');
@@ -133,6 +133,28 @@ class StatisticController extends AbstractFOSRestController
         $jsonCountries = array(
             'totalViews' => $totalViews,
             'countries' => $countriesArray
+        );
+
+        return View::create($jsonCountries, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @param Request $request
+     * @Rest\Post("/getAllPenByPeriod")
+     * @return View
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function postGetAllPenByPeriod(Request $request):View
+    {
+        $time_start = $request->query->get('time_start');
+        $time_end = $request->query->get('time_end');
+
+        $totalViews = $this->statisticRepository->getTotalViewsForPensByPeriod($time_start,$time_end);
+        $pensArray = $this->statisticRepository->getAllPensOnPeriod($time_start,$time_end);
+
+        $jsonCountries = array(
+            'totalViews' => $totalViews,
+            'pens' => $pensArray
         );
 
         return View::create($jsonCountries, Response::HTTP_CREATED);

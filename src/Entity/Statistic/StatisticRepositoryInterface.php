@@ -70,4 +70,11 @@ interface StatisticRepositoryInterface
      * @return array
      */
     public function getLocationByPenOnPeriod(String $idPen, String $time_start, String $time_end): array;
+
+    /**
+     * @param String $time_start
+     * @param String $time_end
+     * @return array
+     */
+    public function getAllPensOnPeriod(String $time_start, String $time_end): array;
 }

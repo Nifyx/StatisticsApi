@@ -119,6 +119,34 @@ final class StatisticRepository implements StatisticRepositoryInterface
     }
 
     /**
+     * @param String $time_start
+     * @param String $time_end
+     * @return int
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function getTotalViewsForPensByPeriod(String $time_start, String $time_end): int
+    {
+        $time_start_format = date('Y-m-d H:i:s',$time_start);
+        $time_end_format = date('Y-m-d H:i:s',$time_end);
+
+        $connection = $this->entityManager->getConnection();
+
+        $sql = 'SELECT COUNT(*) as nbView 
+                FROM STATISTIC s
+                WHERE s.created_at BETWEEN :time_start AND :time_end';
+
+        $stmt = $connection->prepare($sql);
+        $stmt->execute([
+            'time_start' => $time_start_format,
+            'time_end' => $time_end_format
+        ]);
+
+        $totalViews = $stmt->fetch()['nbView'];
+
+        return $totalViews;
+    }
+
+    /**
      * @param String $idPen
      * @param String $time_start
      * @param String $time_end
@@ -270,5 +298,38 @@ final class StatisticRepository implements StatisticRepositoryInterface
         }
 
         return $arrayCountries;
+    }
+
+    /**
+     * @param String $time_start
+     * @param String $time_end
+     * @return array
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function getAllPensOnPeriod(String $time_start, String $time_end): array
+    {
+        $time_start_format = date('Y-m-d H:i:s',$time_start);
+        $time_end_format = date('Y-m-d H:i:s',$time_end);
+
+        $connection = $this->entityManager->getConnection();
+
+        $sql = 'SELECT COUNT(*) as nbView, pen_id
+                FROM STATISTIC s
+                WHERE s.created_at BETWEEN :time_start AND :time_end
+                GROUP BY s.pen_id';
+
+        $stmt = $connection->prepare($sql);
+        $stmt->execute([
+            'time_start' => $time_start_format,
+            'time_end' => $time_end_format
+        ]);
+
+        $pens = $stmt->fetchAll();
+        $arrayPens = array();
+        foreach($pens as $key => $value){
+            array_push($arrayPens,['totalViews' => $value['nbView'], 'id' => $value['pen_id']]);
+        }
+
+        return $arrayPens;
     }
 }
