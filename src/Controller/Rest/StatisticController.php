@@ -59,7 +59,11 @@ class StatisticController extends AbstractFOSRestController
 
         $this->statisticRepository->save($statistic);
 
-        return View::create($statistic, Response::HTTP_CREATED);
+        $view = $this->view($statistic, Response::HTTP_CREATED)
+            ->setHeader('Content-Type', 'application/json')
+            ->setHeader('Access-Control-Allow-Origin','*');
+
+        return $view;
     }
 
     /**
