@@ -116,7 +116,11 @@ class StatisticController extends AbstractFOSRestController
             'days' => $daysArray
         );
 
-        return View::create($data, Response::HTTP_OK);
+        $view = $this->view($data, Response::HTTP_OK)
+            ->setHeader('Content-Type', 'application/json')
+            ->setHeader('Access-Control-Allow-Origin','*');
+
+        return $view;
     }
 
     /**
@@ -139,7 +143,11 @@ class StatisticController extends AbstractFOSRestController
             'countries' => $countriesArray
         );
 
-        return View::create($jsonCountries, Response::HTTP_CREATED);
+        $view = $this->view($jsonCountries, Response::HTTP_OK)
+            ->setHeader('Content-Type', 'application/json')
+            ->setHeader('Access-Control-Allow-Origin','*');
+
+        return $view;
     }
 
     /**
@@ -156,11 +164,15 @@ class StatisticController extends AbstractFOSRestController
         $totalViews = $this->statisticRepository->getTotalViewsForPensByPeriod($time_start,$time_end);
         $pensArray = $this->statisticRepository->getAllPensOnPeriod($time_start,$time_end);
 
-        $jsonCountries = array(
+        $jsonPen = array(
             'totalViews' => $totalViews,
             'pens' => $pensArray
         );
 
-        return View::create($jsonCountries, Response::HTTP_CREATED);
+        $view = $this->view($jsonPen, Response::HTTP_OK)
+            ->setHeader('Content-Type', 'application/json')
+            ->setHeader('Access-Control-Allow-Origin','*');
+
+        return $view;
     }
 }
