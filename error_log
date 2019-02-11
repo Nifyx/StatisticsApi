@@ -1,0 +1,8 @@
+[26-Jan-2019 13:10:04 UTC] PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\ClassNotFoundException: Attempted to load class "NelmioCorsBundle" from namespace "Nelmio\CorsBundle".
+Did you forget a "use" statement for another namespace? in /home/gcftp/api.antoinepluchon.com/src/Kernel.php:33
+Stack trace:
+#0 /home/gcftp/api.antoinepluchon.com/vendor/symfony/http-kernel/Kernel.php(424): App\Kernel->registerBundles()
+#1 /home/gcftp/api.antoinepluchon.com/vendor/symfony/http-kernel/Kernel.php(130): Symfony\Component\HttpKernel\Kernel->initializeBundles()
+#2 /home/gcftp/api.antoinepluchon.com/vendor/symfony/framework-bundle/Console/Application.php(65): Symfony\Component\HttpKernel\Kernel->boot()
+#3 /home/gcftp/api.antoinepluchon.com/vendor/symfony/console/Application.php(145): Symfony\Bundle\FrameworkBundle\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 /home/gcftp/api.antoinepluchon.com/bin/console(38): Symfony\Component\Console\Application->run(Object(Symfon in /home/gcftp/api.antoinepluchon.com/src/Kernel.php on line 33
