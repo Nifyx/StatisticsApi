@@ -74,14 +74,16 @@ class StatisticController extends AbstractFOSRestController
      */
     public function postGetPenByPeriod(Request $request):View
     {
-        $id = $request->query->get('id');
-        $time_start = $request->query->get('time_start');
-        $time_end = $request->query->get('time_end');
+        $id = $request->request->get('id');
+        $time_start = $request->request->get('time_start');
+        $time_end = $request->request->get('time_end');
 
         $pens = $this->statisticRepository->getPenByPeriod($id, $time_start, $time_end);
         $viewTotal = $this->statisticRepository->getTotalViewsForPenByPeriod($id, $time_start, $time_end);
         $originArray = $this->statisticRepository->getTotalViewsByOrigin($id, $time_start, $time_end);
         $daysArray = $this->statisticRepository->getStatsPerDay($id, $time_start, $time_end);
+        $originCodePen = "";
+        $nbViewCodePen = 0;
 
         /**
          * Get stat from codepen
@@ -132,9 +134,9 @@ class StatisticController extends AbstractFOSRestController
      */
     public function postGetLocationByPeriod(Request $request):View
     {
-        $id = $request->query->get('id');
-        $time_start = $request->query->get('time_start');
-        $time_end = $request->query->get('time_end');
+        $id = $request->request->get('id');
+        $time_start = $request->request->get('time_start');
+        $time_end = $request->request->get('time_end');
 
         $totalViews = $this->statisticRepository->getTotalViewsForPenByPeriod($id,$time_start,$time_end);
         $countriesArray = $this->statisticRepository->getLocationByPenOnPeriod($id,$time_start,$time_end);
@@ -160,8 +162,8 @@ class StatisticController extends AbstractFOSRestController
      */
     public function postGetAllPenByPeriod(Request $request):View
     {
-        $time_start = $request->query->get('time_start');
-        $time_end = $request->query->get('time_end');
+        $time_start = $request->request->get('time_start');
+        $time_end = $request->request->get('time_end');
 
         $totalViews = $this->statisticRepository->getTotalViewsForPensByPeriod($time_start,$time_end);
         $pensArray = $this->statisticRepository->getAllPensOnPeriod($time_start,$time_end);
