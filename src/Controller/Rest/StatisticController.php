@@ -44,7 +44,7 @@ class StatisticController extends AbstractFOSRestController
      */
     public function postStatistic(Request $request):View
     {
-        /*$idPen = $request->get('idPen');
+        $idPen = $request->get('idPen');
         $pen = $this->penRepository->findById($idPen);
         if($pen == null){
             $pen = new Pen();
@@ -55,22 +55,11 @@ class StatisticController extends AbstractFOSRestController
         $statistic = new Statistic();
         $statistic->setCountry($request->get('country'));
         $statistic->setPen($pen);
-        $statistic->setOrigin($request->get('origin'));*/
+        $statistic->setOrigin($request->get('origin'));
 
-        $time_start = $request->request->get('time_start');
-        $time_end = $request->request->get('time_end');
+        $this->statisticRepository->save($statistic);
 
-        $totalViews = $this->statisticRepository->getTotalViewsForPensByPeriod($time_start,$time_end);
-        $pensArray = $this->statisticRepository->getAllPensOnPeriod($time_start,$time_end);
-
-        $jsonPen = array(
-            'totalViews' => $totalViews,
-            'pens' => $pensArray
-        );
-
-        //$this->statisticRepository->save($statistic);
-
-        $view = $this->view($jsonPen, Response::HTTP_CREATED)
+        $view = $this->view($statistic, Response::HTTP_CREATED)
             ->setHeader('Content-Type', 'application/json')
             ->setHeader('Access-Control-Allow-Origin','*');
 
