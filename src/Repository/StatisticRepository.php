@@ -102,7 +102,7 @@ final class StatisticRepository implements StatisticRepositoryInterface
         $connection = $this->entityManager->getConnection();
 
         $sql = 'SELECT COUNT(*) as nbView 
-                FROM STATISTIC s
+                FROM gcftp_apiStats.statistic s
                 WHERE s.pen_id = :idPen
                 AND s.created_at BETWEEN :time_start AND :time_end';
 
@@ -132,7 +132,7 @@ final class StatisticRepository implements StatisticRepositoryInterface
         $connection = $this->entityManager->getConnection();
 
         $sql = 'SELECT COUNT(*) as nbView 
-                FROM STATISTIC s
+                FROM gcftp_apiStats.statistic s
                 WHERE s.created_at BETWEEN :time_start AND :time_end';
 
         $stmt = $connection->prepare($sql);
@@ -161,7 +161,7 @@ final class StatisticRepository implements StatisticRepositoryInterface
         $connection = $this->entityManager->getConnection();
 
         $sql = 'SELECT COUNT(*) as nbView, origin 
-                FROM STATISTIC s
+                FROM gcftp_apiStats.statistic s
                 WHERE s.pen_id = :idPen
                 AND s.created_at BETWEEN :time_start AND :time_end
                 GROUP BY s.origin';
@@ -204,7 +204,7 @@ final class StatisticRepository implements StatisticRepositoryInterface
          */
         while($date_start < $date_end){
             $sql = "SELECT COUNT(*) as nbView, origin 
-                FROM STATISTIC s
+                FROM gcftp_apiStats.statistic s
                 WHERE s.pen_id = :idPen
                 AND s.created_at > :date_start AND s.created_at < DATE_ADD(:date_start, INTERVAL 1 DAY)
                 GROUP BY s.origin";
@@ -279,7 +279,7 @@ final class StatisticRepository implements StatisticRepositoryInterface
         $connection = $this->entityManager->getConnection();
 
         $sql = 'SELECT COUNT(*) as nbView, country 
-                FROM STATISTIC s
+                FROM gcftp_apiStats.statistic s
                 WHERE s.pen_id = :idPen
                 AND s.created_at BETWEEN :time_start AND :time_end
                 GROUP BY s.country';
@@ -314,7 +314,7 @@ final class StatisticRepository implements StatisticRepositoryInterface
         $connection = $this->entityManager->getConnection();
 
         $sql = 'SELECT COUNT(*) as nbView, pen_id
-                FROM statistic s
+                FROM gcftp_apiStats.statistic s
                 WHERE s.created_at BETWEEN :time_start AND :time_end
                 GROUP BY s.pen_id';
 
