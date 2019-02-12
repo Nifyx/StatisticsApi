@@ -314,7 +314,7 @@ final class StatisticRepository implements StatisticRepositoryInterface
         $connection = $this->entityManager->getConnection();
 
         $sql = 'SELECT COUNT(*) as nbView, pen_id
-                FROM STATISTIC s
+                FROM statistic s
                 WHERE s.created_at BETWEEN :time_start AND :time_end
                 GROUP BY s.pen_id';
 
