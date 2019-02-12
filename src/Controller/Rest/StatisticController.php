@@ -119,8 +119,7 @@ class StatisticController extends AbstractFOSRestController
             'days' => $daysArray
         );
 
-        $test = new Statistic();
-        $view = $this->view($test, Response::HTTP_OK)
+        $view = $this->view($data, Response::HTTP_OK)
             ->setHeader('Content-Type', 'application/json')
             ->setHeader('Access-Control-Allow-Origin','*');
 
