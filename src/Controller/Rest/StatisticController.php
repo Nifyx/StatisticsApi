@@ -13,6 +13,7 @@ use App\Entity\Pen\Pen;
 use App\Entity\Statistic\Statistic;
 use App\Repository\PenRepository;
 use App\Repository\StatisticRepository;
+use Doctrine\DBAL\DBALException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
@@ -157,15 +158,18 @@ class StatisticController extends AbstractFOSRestController
      * @param Request $request
      * @Rest\Post("/getAllPenByPeriod")
      * @return View
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function postGetAllPenByPeriod(Request $request):View
     {
         $time_start = $request->request->get('time_start');
         $time_end = $request->request->get('time_end');
 
-        $totalViews = $this->statisticRepository->getTotalViewsForPensByPeriod($time_start,$time_end);
-        $pensArray = $this->statisticRepository->getAllPensOnPeriod($time_start,$time_end);
+        try{
+            $totalViews = $this->statisticRepository->getTotalViewsForPensByPeriod($time_start,$time_end);
+            $pensArray = $this->statisticRepository->getAllPensOnPeriod($time_start,$time_end);
+        }catch(DBALException $e){
+            dump($e);
+        }
 
         $jsonPen = array(
             'totalViews' => $totalViews,
