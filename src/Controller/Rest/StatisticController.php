@@ -90,7 +90,7 @@ class StatisticController extends AbstractFOSRestController
          * Get stat from codepen
          */
         foreach($originArray as $key => $value){
-            if($value['origin'] == "codepen"){
+            if($value['origin'] == "codepen.io"){
                 $originCodePen = $originArray[$key]['origin'];
                 $nbViewCodePen = $originArray[$key]['nbView'];
                 unset($originArray[$key]);
@@ -101,10 +101,10 @@ class StatisticController extends AbstractFOSRestController
          * Create the list for externals stats
          */
         $nbTotalViewsExternal = 0;
-        $arrayList = array('List' => array());
+        $arrayList = array('list' => array());
         foreach($originArray as $key => $value){
             $nbTotalViewsExternal += $value['nbView'];
-            array_push($arrayList['List'],['url' => $value['origin'], 'totalViews' => $value['nbView']]);
+            array_push($arrayList['list'],['url' => $value['origin'], 'totalViews' => $value['nbView']]);
         }
 
         /**
@@ -157,18 +157,15 @@ class StatisticController extends AbstractFOSRestController
      * @param Request $request
      * @Rest\Post("/getAllPenByPeriod")
      * @return View
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function postGetAllPenByPeriod(Request $request):View
     {
         $time_start = $request->request->get('time_start');
         $time_end = $request->request->get('time_end');
 
-        try{
-            $totalViews = $this->statisticRepository->getTotalViewsForPensByPeriod($time_start,$time_end);
-            $pensArray = $this->statisticRepository->getAllPensOnPeriod($time_start,$time_end);
-        }catch(DBALException $e){
-            dump($e);
-        }
+        $totalViews = $this->statisticRepository->getTotalViewsForPensByPeriod($time_start,$time_end);
+        $pensArray = $this->statisticRepository->getAllPensOnPeriod($time_start,$time_end);
 
         $jsonPen = array(
             'totalViews' => $totalViews,

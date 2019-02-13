@@ -72,8 +72,8 @@ final class StatisticRepository implements StatisticRepositoryInterface
      */
     public function getPenByPeriod(String $idPen, String $time_start, String $time_end): array
     {
-        $time_start_format = date('Y-m-d H:i:s',$time_start);
-        $time_end_format = date('Y-m-d H:i:s',$time_end);
+        $time_start_format = date('Y-m-d',$time_start);
+        $time_end_format = date('Y-m-d',$time_end);
 
         $query = $this->entityManager->createQuery('SELECT s 
             FROM App\Entity\Statistic\Statistic s 
@@ -96,8 +96,8 @@ final class StatisticRepository implements StatisticRepositoryInterface
      */
     public function getTotalViewsForPenByPeriod(String $idPen, String $time_start, String $time_end): int
     {
-        $time_start_format = date('Y-m-d H:i:s',$time_start);
-        $time_end_format = date('Y-m-d H:i:s',$time_end);
+        $time_start_format = date('Y-m-d',$time_start);
+        $time_end_format = date('Y-m-d',$time_end);
 
         $connection = $this->entityManager->getConnection();
 
@@ -126,8 +126,8 @@ final class StatisticRepository implements StatisticRepositoryInterface
      */
     public function getTotalViewsForPensByPeriod(String $time_start, String $time_end): int
     {
-        $time_start_format = date('Y-m-d H:i:s',$time_start);
-        $time_end_format = date('Y-m-d H:i:s',$time_end);
+        $time_start_format = date('Y-m-d',$time_start);
+        $time_end_format = date('Y-m-d',$time_end);
 
         $connection = $this->entityManager->getConnection();
 
@@ -155,8 +155,8 @@ final class StatisticRepository implements StatisticRepositoryInterface
      */
     public function getTotalViewsByOrigin(String $idPen, String $time_start, String $time_end): array
     {
-        $time_start_format = date('Y-m-d H:i:s',$time_start);
-        $time_end_format = date('Y-m-d H:i:s',$time_end);
+        $time_start_format = date('Y-m-d',$time_start);
+        $time_end_format = date('Y-m-d',$time_end);
 
         $connection = $this->entityManager->getConnection();
 
@@ -206,7 +206,7 @@ final class StatisticRepository implements StatisticRepositoryInterface
             $sql = "SELECT COUNT(*) as nbView, origin 
                 FROM gcftp_apiStats.statistic s
                 WHERE s.pen_id = :idPen
-                AND s.created_at > :date_start AND s.created_at < DATE_ADD(:date_start, INTERVAL 1 DAY)
+                AND s.created_at >= :date_start AND s.created_at <= DATE_ADD(:date_start, INTERVAL 1 DAY)
                 GROUP BY s.origin";
 
             $stmt = $connection->prepare($sql);
@@ -226,12 +226,13 @@ final class StatisticRepository implements StatisticRepositoryInterface
             $originCodePen = "";
             $nbViewCodePen = 0;
             foreach($originArray as $key => $value){
-                if($value['origin'] == "codepen"){
+                if($value['origin'] == "codepen.io"){
                     $originCodePen = $originArray[$key]['origin'];
                     $nbViewCodePen = $originArray[$key]['nbView'];
                     unset($originArray[$key]);
                 }
             }
+            $originCodePen = "codepen.io";
 
             /**
              * Give details on the externals view
